@@ -1,0 +1,29 @@
+﻿
+<div class="d-flex flex-row ">
+    <div><InputCheckbox @bind-Value="TaskItem.IsComplete" @bind-Value:after="updateTask" ></InputCheckbox></div>
+    <div class="px-2 flex-grow-1 @(TaskItem.IsComplete ? "complete" : "")">@TaskItem.Name</div>
+    <div><a @onclick="deleteTask"><i class="bi bi-trash-fill text-danger"></i></a></div>
+</div>
+
+
+
+@code {
+
+    [Parameter, EditorRequired]
+    public TaskItem? TaskItem { get; set; }
+
+    [Parameter]
+    public EventCallback<TaskItem> OnDeleteCallBake { get; set; }
+
+    [Parameter]
+    public EventCallback<TaskItem> OnCompleteCallBake { get; set; }
+
+    private async Task deleteTask()
+    {
+        await OnDeleteCallBake.InvokeAsync(TaskItem);
+    }
+    private async Task updateTask()
+    {
+        await OnCompleteCallBake.InvokeAsync(TaskItem);
+    }
+}

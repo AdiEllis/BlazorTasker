@@ -1,0 +1,49 @@
+﻿@page "/tasker"
+
+<div class="d-flex justify-content-center align-items-center">
+    <div class="task p-5">
+        <div class="p-3 text-center mb-3">
+            <img src="/tasker.png" width="300" />
+        </div>
+        <EditForm Model="taskItem" OnValidSubmit="addTask">
+            <DataAnnotationsValidator/>
+            <div class="d-flex flex-row gap-1">
+                <InputText class="form-control" placeholder="Enter a new task" @bind-Value="taskItem.Name"/>
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+            <hr/>
+            <ValidationMessage For="@(() => taskItem.Name)" />
+        </EditForm>
+        <div class="vstack">
+            @foreach(var taskItem in taskItems)
+                {
+                    <TaskerLine TaskItem="taskItem" OnDeleteCallBake="@deleteTask" OnCompleteCallBake="@updateTask" /> 
+                }
+
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+
+    private TaskItem taskItem = new();
+    private List<TaskItem> taskItems = new();
+
+    public void addTask()
+    {
+        taskItem.Id = Guid.NewGuid();
+        taskItems.Add(taskItem);
+        taskItem = new();
+    }
+
+    public void deleteTask(TaskItem item)
+    {
+        taskItems.Remove(item);
+    }
+    public void updateTask(TaskItem item)
+    {
+        
+    }
+}
