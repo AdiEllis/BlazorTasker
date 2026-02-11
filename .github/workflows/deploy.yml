@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ] # ודאי שזה שם ה-branch שלך (main או master)
+    branches: [ master ] # ודאי שזה שם ה-branch שלך (main או master)
 
 jobs:
   deploy-to-github-pages:
