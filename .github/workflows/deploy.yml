@@ -2,35 +2,31 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ master ] # ודאי שזה שם ה-branch שלך (main או master)
+    branches: [ master ] # כאן השינוי החשוב
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  deploy-to-github-pages:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x' # שדרגי ל-9.0 אם את משתמשת בגרסה הכי חדשה
+      - uses: actions/checkout@v4
 
-      - name: Publish application
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x' 
+
+      - name: Publish
         run: dotnet publish -c Release -o release
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: release/wwwroot
 
-  deploy:
-    needs: deploy-to-github-pages
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+      - name: Deploy
+        uses: actions/deploy-pages@v4
